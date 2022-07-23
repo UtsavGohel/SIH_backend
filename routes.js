@@ -1,4 +1,3 @@
-const { application } = require('express');
 const express = require('express')
 const router = express.Router()
 
@@ -20,19 +19,22 @@ router.post('/user_register', function(req, res){
 //User login
 router.post('/user_login', function(req, res){
     res.writeHead(200,{'Content-Type':'text/html'})
-    const {email,password} = req.body;
-    let sql = "SELECT email,password from `user` where email = ? and password = ?" 
-     mysqlCon.query(sql,[email,password], 
-        function(err, result){
-            if(result) {
+    const email = req.body.email;
+    const password = req.body.password;
+    let sql = "SELECT * from `user` where email = ? and password = ?" 
+    if(email&&password){
+        mysqlCon.query(sql,[email,password],function(error,result){
+            if(error) throw error;
+            
+            if(result.length>0){
                 res.write('Login Succesfull')
-                res.end();
-            }else{                
+                res.end()
+            }else{
                 res.write('Invalid credentials')
-                throw err;
-
+                res.end()
             }
-        });
+        })
+    }
 });
 
 
@@ -56,13 +58,18 @@ router.post('/recruiter_login', function(req, res){
     let sql = "SELECT email,password from `recruiter` where email = ? and password = ?" 
      mysqlCon.query(sql,[email,password], 
         function(err, result){
-            if(result) {
-                res.write('Login Succesfull')
-                res.end();
-            }else{                
-                res.write('Invalid credentials')
-                throw err;
-
+            if(email&&password){
+                mysqlCon.query(sql,[email,password],function(error,result){
+                    if(error) throw error;
+                    
+                    if(result.length>0){
+                        res.write('Login Succesfull')
+                        res.end()
+                    }else{
+                        res.write('Invalid credentials')
+                        res.end()
+                    }
+                })
             }
         });
 });
