@@ -1,5 +1,14 @@
 const express = require('express')
+const csvtojsonV1=require('csvtojson');
+var path = require('path');
+var fs = require('fs'),
+path = require('path')  
+const csv = require('fast-csv')
+
+    
 const router = express.Router()
+var multer = require('multer')
+
 
 const mysqlCon = require('./conn')
 
@@ -200,6 +209,98 @@ router.get('/job_details', function(req, res){
         });
 }); 
 
+
+
+//storage for csv file
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+       cb(null, 'uploads');
+    },
+    filename: function (req, file, cb) {
+       cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+    }
+ });
+ var upload = multer({ storage: storage });
+
+// Insert proffersor data into portal by csv
+ router.post('/addcsv', upload.single('data'), (req, res, next) => {
+    const file = req.file;
+    var filename = req.file.filename;
+    console.log(filename);
+    if (!file) {
+       return res.status(400).send({ message: 'Please upload a file.' });
+    }
+    var sql = "INSERT INTO data (`data`) VALUES (?)";
+    var query = mysqlCon.query(sql, function(err, result) {
+        return res.send({ message: 'File is successfully.', file });
+     });
+    //  filePath=path.join(__dirname,'/uploads',filename);
+    //  console.log(filename,"get");
+    //  fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+    //      if (!err) {
+    //          console.log('received data: ' + data);
+    //          response.writeHead(200, {'Content-Type': 'text/html'});
+    //          response.write(data);
+    //          response.end();
+    //      } else {
+    //          console.log(err);
+    //      }
+    //  }); 
+ });
+
+//  get proffersor data from csv
+router.get('/readcsv',function(req,response){
+        filePath=path.join(__dirname,'/uploads','abc.csv');
+        // console.log(filename,"get");
+        fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+            if (!err) {
+                console.log('received data: ' + data);
+                response.writeHead(200, {'Content-Type': 'text/html'});
+                response.write(data);
+                response.end();
+            } else {
+                console.log(err);
+            }
+        });        
+    })
+
+    filePath=path.join(__dirname,'/uploads','Sample.csv');
+
+    // function UploadCsvDataToMySQL(filePath){
+    //     let stream = fs.createReadStream(filePath);
+    //     let csvData = [];
+    //     let csvStream = csv
+    //         .parse()
+    //         .on("data", function (data) {
+    //             csvData.push(data);
+    //         })
+    //         .on("end", function () {
+    //             // Remove Header ROW
+    //             csvData.shift();
+      
+    //             // Open the MySQL connection
+    //             mysqlCon.connect((error) => {
+    //                 if (error) {
+    //                     console.error(error);
+    //                 } else {
+    //                     let query = 'INSERT INTO employee (name,contact,address,experience,collegeId,stream,subject,DOB) VALUES (?,?,?,?,?,?,?,?)';
+    //                     mysqlCon.query(query, [csvData], (error, response) => {
+    //                         console.log(error || response);
+    //                     });
+    //                 }
+    //             });
+                 
+    //             // delete file after saving to MySQL database
+    //             // -> you can comment the statement to see the uploaded CSV file.
+    //             fs.unlinkSync(filePath)
+    //         });
+      
+    //     stream.pipe(csvStream);
+    // }
+         
+// router.get('/adddataToDB',(req,res)=>{
+//     UploadCsvDataToMySQL(filePath)
+// })
 
 // //Apply for job -- not done yet
 // router.post('/jobApply', function(req, res){
