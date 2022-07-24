@@ -27,7 +27,6 @@ router.post('/user_register', function(req, res){
 
 //User login
 router.post('/user_login', function(req, res){
-    res.writeHead(200,{'Content-Type':'text/html'})
     const email = req.body.email;
     const password = req.body.password;
     let sql = "SELECT * from `user` where email = ? and password = ?" 
@@ -36,10 +35,11 @@ router.post('/user_login', function(req, res){
             if(error) throw error;
             
             if(result.length>0){
-                res.write('Login Succesfull')
+                
+                res.status(200).json('Login Succesfull')
                 res.end()
             }else{
-                res.write('Invalid credentials')
+                res.status(401).json('Invalid credentials')
                 res.end()
             }
         })
@@ -316,6 +316,24 @@ router.get('/readcsv',function(req,response){
 // });
 
 
+//Get college name
+router.get('/getCollege',(req,res)=>{
+    let sql = 'select id,collegeName from college';
+    mysqlCon.query(sql,function(err, result){
+                    if(err) throw err;
+                    res.send(result)    
+                    res.end();
+                });
+})
+//Get stream name
+router.get('/getStream',(req,res)=>{
+    let sql = 'select id,streamName from stream';
+    mysqlCon.query(sql, function(err, result){
+                    if(err) throw err;
+                    res.send(result)    
+                    res.end();
+                });
+})
 
 
 module.exports = router;
