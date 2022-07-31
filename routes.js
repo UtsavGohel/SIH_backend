@@ -36,7 +36,8 @@ router.post('/user_login', function(req, res){
             
             if(result.length>0){
                 
-                res.status(200).json('Login Succesfull')
+                res.status(200).json({msg:'Login Succesfull',data:result[0]})
+                
                 res.end()
             }else{
                 res.status(401).json('Invalid credentials')
@@ -102,11 +103,11 @@ router.get('/user_details', function(req, res){
 
 //All Details of user by id
 router.get('/user_details/:id', function(req, res){
-     mysqlCon.query("SELECT name,email,user.address,experience,subjects,resume,notice_period,collegeName,streamName,collegeName,DOB from user inner join college on (user.collegeId = college.id) inner join stream on (user.streamId = stream.id) WHERE user.id=?",
+     mysqlCon.query("SELECT name,email,user.address,experience,subjects,resume,notice_period,collegeName,streamName,collegeName,DOB from user inner join college on (user.collegeId = college.id) inner join stream on (user.streamId = stream.id) WHERE user.id=? " ,
      [req.params.id],
         function(err, result){
             if(result) {
-                res.json(result)
+                res.json(result[0])
                 res.end();
             }else{                
                 res.write('error')
@@ -114,9 +115,6 @@ router.get('/user_details/:id', function(req, res){
             }
         });
 });
-
-
-
 
 // Edit Details of user
 // provide all the details..
