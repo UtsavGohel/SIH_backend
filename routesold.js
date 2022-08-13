@@ -50,10 +50,10 @@ router.post('/user_login', function(req, res){
 
 // Recruiter Register
 router.post('/recruiter_register', function(req, res){
-    res.writeHead(200,{'Content-Type':'text/html'})
-    const {name,email, password,address, contact, collegeId} = req.body;
-    let sql = "INSERT INTO `recruiter` (name,email, password,address, contact, collegeId) VALUES (?,?,?,?,?,?)" 
-     mysqlCon.query(sql,[name,email, password,address, contact, collegeId], 
+    // res.writeHead(200,{'Content-Type':'text/html'})
+    const {name,email, password,collegeId} = req.body;
+    let sql = "INSERT INTO `recruiter` (name,email, password,collegeId) VALUES (?,?,?,?)" 
+     mysqlCon.query(sql,[name,email, password,collegeId], 
         function(err, result){
             if(err) throw err;
             res.write('Recruiter Record inserted')
@@ -114,20 +114,36 @@ router.get('/user_details/:id', function(req, res){
             }
         });
 });
+//All Details of user
+router.get('/recruiter_details', function(req, res){
+    let sql = "SELECT recruiter.id,name,email,collegeName,collegeName from recruiter inner join college on recruiter.collegeId = college.id" 
+     mysqlCon.query(sql,
+        function(err, result){
+            if(result) {
+                res.json(result)
+                res.end();
+            }else{                
+                res.write('error')
+                throw err;
 
-//All Details of job by recruiter id
-router.get('/get_jobs/:id', function(req, res){
-    mysqlCon.query("SELECT jobs.id, recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId from jobs inner join recruiter on (jobs.recruiterId = recruiter.id) WHERE recruiter.id=? " ,
-    [req.params.id],
-       function(err, result){
-           if(result) {
-               res.json(result)
-               res.end();
-           }else{                
-               res.write('error')
-               throw err;
-           }
-       });
+            }
+        });
+});
+
+
+//All Details of user by id
+router.get('/recruiter_details/:id', function(req, res){
+     mysqlCon.query("SELECT name,email,user.address,experience,subjects,resume,notice_period,collegeName,streamName,collegeName,DOB from user inner join college on (user.collegeId = college.id) inner join stream on (user.streamId = stream.id) WHERE user.id=? " ,
+     [req.params.id],
+        function(err, result){
+            if(result) {
+                res.json(result[0])
+                res.end();
+            }else{                
+                res.write('error')
+                throw err;
+            }
+        });
 });
 
 // Edit Details of user
@@ -168,13 +184,13 @@ router.post('/clgData', function(req, res){
 
 //Add job data
 router.post('/jobDetails', function(req, res){
-    console.log(req.body);
-    const {recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId} = req.body;
-    let sql = "INSERT INTO `jobs` (recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId) VALUES (?,?,?,?,?,?,?,?,?,?)" 
-     mysqlCon.query(sql,[recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId], 
+    res.writeHead(200,{'Content-Type':'text/html'})
+    const {collegeId,job_description,noOfOpening} = req.body;
+    let sql = "INSERT INTO `jobs` (collegeId,job_description,noOfOpening) VALUES (?,?,?)" 
+     mysqlCon.query(sql,[collegeId,job_description,noOfOpening], 
         function(err, result){
             if(err) throw err;
-            res.status(200).json({msg:'Record Inserted Successfully'})
+            res.write('Job Record inserted')
             res.end();
         });
 });
@@ -182,9 +198,9 @@ router.post('/jobDetails', function(req, res){
 //Edit job data
 router.put('/jobDetails', function(req, res){
     res.writeHead(200,{'Content-Type':'text/html'})
-    const {id,recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId} = req.body;
-    let sql = "UPDATE jobs SET recruiterId=?, jobTitle=?, jobDescription=?, noOfOpening=?, jobTypeId=?, streamId=?, experience=?, qualification=?, city=?, stateId=? WHERE jobs.id = ?" 
-     mysqlCon.query(sql,[recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId,id], 
+    const {id,collegeId,job_description,noOfOpening} = req.body;
+    let sql = "UPDATE jobs SET collegeId=?,job_description=?,noOfOpening=? WHERE jobs.id = ?" 
+     mysqlCon.query(sql,[collegeId,job_description,noOfOpening,id], 
         function(err, result){
             if(err) throw err;
             res.write('Updated Record')
@@ -346,98 +362,6 @@ router.get('/getStream',(req,res)=>{
                     res.end();
                 });
 })
-//Get jobType name
-router.get('/getJobType',(req,res)=>{
-    let sql = 'select id,name from job_types';
-    mysqlCon.query(sql, function(err, result){
-                    if(err) throw err;
-                    res.send(result)    
-                    res.end();
-                });
-})
 
-//Get state name
-router.get('/getState',(req,res)=>{
-    let sql = 'select id,name from states';
-    mysqlCon.query(sql, function(err, result){
-                    if(err) throw err;
-                    res.send(result)    
-                    res.end();
-                });
-})
 
-// Get number of  applicants of job
-router.get('/getNumberOfApplicant/:id',(req,res)=>{
-    mysqlCon.query("SELECT COUNT(applications.id) as count from applications inner join jobs on (applications.jobId = jobs.id) WHERE jobs.id=? " ,
-     [req.params.id],
-        function(err, result){
-            if(result) {
-                res.json(result[0])
-                res.end();
-            }else{
-                res.write('error')
-                throw err;
-            }
-        });
-})
-
-// Get stream name by id
-router.get('/getStreamName/:id',(req,res)=>{
-    mysqlCon.query("SELECT streamName from stream WHERE id=? " ,
-     [req.params.id],
-        function(err, result){
-            if(result) {
-                res.json(result[0])
-                res.end();
-            }else{                
-                res.write('error')
-                throw err;
-            }
-        });
-})
-
-// Get jobType name by id
-router.get('/getJobType/:id',(req,res)=>{
-    mysqlCon.query("SELECT name from job_types WHERE id=? " ,
-     [req.params.id],
-        function(err, result){
-            if(result) {
-                res.json(result[0])
-                res.end();
-            }else{                
-                res.write('error')
-                throw err;
-            }
-        });
-})
-
-// Get status by id
-router.get('/getStatusName/:id',(req,res)=>{
-    mysqlCon.query("SELECT name from statuses WHERE id=? " ,
-     [req.params.id],
-        function(err, result){
-            if(result) {
-                res.json(result[0])
-                res.end();
-            }else{                
-                res.write('error')
-                throw err;
-            }
-        });
-})
-
-//All candidate list
-router.get('/getCandidateList/:id', function(req, res){
-    mysqlCon.query("SELECT * from applications inner join jobs on applications.jobId = jobs.id inner join recruiter on jobs.recruiterId = recruiter.id join user on applications.userId = user.id WHERE recruiter.id=? " ,
-    [req.params.id],
-       function(err, result){
-           if(result) {
-               res.json(result)
-               res.end();
-           }else{                
-               res.write('error')
-               throw err;
-           }
-       });
-});
 module.exports = router;

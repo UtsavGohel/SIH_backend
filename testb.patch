@@ -1,0 +1,572 @@
+diff --git a/conn.js b/conn.js
+index 3fbc6c6..3f6bc67 100644
+--- a/conn.js
++++ b/conn.js
+@@ -2,7 +2,7 @@ const mysql = require('mysql2')
+ const mysqlCon = mysql.createConnection({
+     host:'localhost',
+     user:'root',
+-    password:'root',
++    password:'Simform@123',
+     database:'tempsih'
+ }) 
+ 
+diff --git a/package-lock.json b/package-lock.json
+index 0d8e4ae..742b1d3 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -36,6 +36,11 @@
+       "resolved": "https://registry.npmjs.org/@types/node/-/node-14.18.22.tgz",
+       "integrity": "sha512-qzaYbXVzin6EPjghf/hTdIbnVW1ErMx8rPzwRNJhlbyJhu2SyqlvjGOY/tbUt6VFyzg56lROcOeSQRInpt63Yw=="
+     },
++    "abbrev": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/abbrev/-/abbrev-1.1.1.tgz",
++      "integrity": "sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q=="
++    },
+     "accepts": {
+       "version": "1.3.8",
+       "resolved": "https://registry.npmjs.org/accepts/-/accepts-1.3.8.tgz",
+@@ -45,6 +50,15 @@
+         "negotiator": "0.6.3"
+       }
+     },
++    "anymatch": {
++      "version": "3.1.2",
++      "resolved": "https://registry.npmjs.org/anymatch/-/anymatch-3.1.2.tgz",
++      "integrity": "sha512-P43ePfOAIupkguHUycrc4qJ9kz8ZiuOUijaETwX7THt0Y/GNK7v0aa8rY816xWjZ7rJdA5XdMcpVFTKMq+RvWg==",
++      "requires": {
++        "normalize-path": "^3.0.0",
++        "picomatch": "^2.0.4"
++      }
++    },
+     "append-field": {
+       "version": "1.0.0",
+       "resolved": "https://registry.npmjs.org/append-field/-/append-field-1.0.0.tgz",
+@@ -55,11 +69,21 @@
+       "resolved": "https://registry.npmjs.org/array-flatten/-/array-flatten-1.1.1.tgz",
+       "integrity": "sha512-PCVAQswWemu6UdxsDFFX/+gVeYqKAod3D3UVm91jHwynguOwAvYPhx8nNlM++NqRcK6CxxpUafjmhIdKiHibqg=="
+     },
++    "balanced-match": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz",
++      "integrity": "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw=="
++    },
+     "bignumber.js": {
+       "version": "9.0.0",
+       "resolved": "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.0.0.tgz",
+       "integrity": "sha512-t/OYhhJ2SD+YGBQcjY8GzzDHEk9f3nerxjtfa6tlMXfe7frs/WozhvCNoGvpM0P3bNf3Gq5ZRMlGr5f3r4/N8A=="
+     },
++    "binary-extensions": {
++      "version": "2.2.0",
++      "resolved": "https://registry.npmjs.org/binary-extensions/-/binary-extensions-2.2.0.tgz",
++      "integrity": "sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA=="
++    },
+     "bluebird": {
+       "version": "3.7.2",
+       "resolved": "https://registry.npmjs.org/bluebird/-/bluebird-3.7.2.tgz",
+@@ -84,6 +108,23 @@
+         "unpipe": "1.0.0"
+       }
+     },
++    "brace-expansion": {
++      "version": "1.1.11",
++      "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz",
++      "integrity": "sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==",
++      "requires": {
++        "balanced-match": "^1.0.0",
++        "concat-map": "0.0.1"
++      }
++    },
++    "braces": {
++      "version": "3.0.2",
++      "resolved": "https://registry.npmjs.org/braces/-/braces-3.0.2.tgz",
++      "integrity": "sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==",
++      "requires": {
++        "fill-range": "^7.0.1"
++      }
++    },
+     "buffer-from": {
+       "version": "1.1.2",
+       "resolved": "https://registry.npmjs.org/buffer-from/-/buffer-from-1.1.2.tgz",
+@@ -111,6 +152,26 @@
+         "get-intrinsic": "^1.0.2"
+       }
+     },
++    "chokidar": {
++      "version": "3.5.3",
++      "resolved": "https://registry.npmjs.org/chokidar/-/chokidar-3.5.3.tgz",
++      "integrity": "sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==",
++      "requires": {
++        "anymatch": "~3.1.2",
++        "braces": "~3.0.2",
++        "fsevents": "~2.3.2",
++        "glob-parent": "~5.1.2",
++        "is-binary-path": "~2.1.0",
++        "is-glob": "~4.0.1",
++        "normalize-path": "~3.0.0",
++        "readdirp": "~3.6.0"
++      }
++    },
++    "concat-map": {
++      "version": "0.0.1",
++      "resolved": "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz",
++      "integrity": "sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg=="
++    },
+     "concat-stream": {
+       "version": "1.6.2",
+       "resolved": "https://registry.npmjs.org/concat-stream/-/concat-stream-1.6.2.tgz",
+@@ -259,6 +320,14 @@
+         "@fast-csv/parse": "4.3.6"
+       }
+     },
++    "fill-range": {
++      "version": "7.0.1",
++      "resolved": "https://registry.npmjs.org/fill-range/-/fill-range-7.0.1.tgz",
++      "integrity": "sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==",
++      "requires": {
++        "to-regex-range": "^5.0.1"
++      }
++    },
+     "finalhandler": {
+       "version": "1.2.0",
+       "resolved": "https://registry.npmjs.org/finalhandler/-/finalhandler-1.2.0.tgz",
+@@ -283,6 +352,12 @@
+       "resolved": "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz",
+       "integrity": "sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q=="
+     },
++    "fsevents": {
++      "version": "2.3.2",
++      "resolved": "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz",
++      "integrity": "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==",
++      "optional": true
++    },
+     "function-bind": {
+       "version": "1.1.1",
+       "resolved": "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz",
+@@ -306,6 +381,14 @@
+         "has-symbols": "^1.0.3"
+       }
+     },
++    "glob-parent": {
++      "version": "5.1.2",
++      "resolved": "https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz",
++      "integrity": "sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==",
++      "requires": {
++        "is-glob": "^4.0.1"
++      }
++    },
+     "has": {
+       "version": "1.0.3",
+       "resolved": "https://registry.npmjs.org/has/-/has-1.0.3.tgz",
+@@ -314,6 +397,11 @@
+         "function-bind": "^1.1.1"
+       }
+     },
++    "has-flag": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npmjs.org/has-flag/-/has-flag-3.0.0.tgz",
++      "integrity": "sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw=="
++    },
+     "has-symbols": {
+       "version": "1.0.3",
+       "resolved": "https://registry.npmjs.org/has-symbols/-/has-symbols-1.0.3.tgz",
+@@ -339,6 +427,11 @@
+         "safer-buffer": ">= 2.1.2 < 3"
+       }
+     },
++    "ignore-by-default": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/ignore-by-default/-/ignore-by-default-1.0.1.tgz",
++      "integrity": "sha512-Ius2VYcGNk7T90CppJqcIkS5ooHUZyIQK+ClZfMfMNFEF9VSE73Fq+906u/CWu92x4gzZMWOwfFYckPObzdEbA=="
++    },
+     "inherits": {
+       "version": "2.0.4",
+       "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz",
+@@ -349,6 +442,32 @@
+       "resolved": "https://registry.npmjs.org/ipaddr.js/-/ipaddr.js-1.9.1.tgz",
+       "integrity": "sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g=="
+     },
++    "is-binary-path": {
++      "version": "2.1.0",
++      "resolved": "https://registry.npmjs.org/is-binary-path/-/is-binary-path-2.1.0.tgz",
++      "integrity": "sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==",
++      "requires": {
++        "binary-extensions": "^2.0.0"
++      }
++    },
++    "is-extglob": {
++      "version": "2.1.1",
++      "resolved": "https://registry.npmjs.org/is-extglob/-/is-extglob-2.1.1.tgz",
++      "integrity": "sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ=="
++    },
++    "is-glob": {
++      "version": "4.0.3",
++      "resolved": "https://registry.npmjs.org/is-glob/-/is-glob-4.0.3.tgz",
++      "integrity": "sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg==",
++      "requires": {
++        "is-extglob": "^2.1.1"
++      }
++    },
++    "is-number": {
++      "version": "7.0.0",
++      "resolved": "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz",
++      "integrity": "sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng=="
++    },
+     "is-property": {
+       "version": "1.0.2",
+       "resolved": "https://registry.npmjs.org/is-property/-/is-property-1.0.2.tgz",
+@@ -455,6 +574,14 @@
+         "mime-db": "1.52.0"
+       }
+     },
++    "minimatch": {
++      "version": "3.1.2",
++      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-3.1.2.tgz",
++      "integrity": "sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==",
++      "requires": {
++        "brace-expansion": "^1.1.7"
++      }
++    },
+     "minimist": {
+       "version": "1.2.6",
+       "resolved": "https://registry.npmjs.org/minimist/-/minimist-1.2.6.tgz",
+@@ -564,6 +691,51 @@
+       "resolved": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz",
+       "integrity": "sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg=="
+     },
++    "nodemon": {
++      "version": "2.0.19",
++      "resolved": "https://registry.npmjs.org/nodemon/-/nodemon-2.0.19.tgz",
++      "integrity": "sha512-4pv1f2bMDj0Eeg/MhGqxrtveeQ5/G/UVe9iO6uTZzjnRluSA4PVWf8CW99LUPwGB3eNIA7zUFoP77YuI7hOc0A==",
++      "requires": {
++        "chokidar": "^3.5.2",
++        "debug": "^3.2.7",
++        "ignore-by-default": "^1.0.1",
++        "minimatch": "^3.0.4",
++        "pstree.remy": "^1.1.8",
++        "semver": "^5.7.1",
++        "simple-update-notifier": "^1.0.7",
++        "supports-color": "^5.5.0",
++        "touch": "^3.1.0",
++        "undefsafe": "^2.0.5"
++      },
++      "dependencies": {
++        "debug": {
++          "version": "3.2.7",
++          "resolved": "https://registry.npmjs.org/debug/-/debug-3.2.7.tgz",
++          "integrity": "sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==",
++          "requires": {
++            "ms": "^2.1.1"
++          }
++        },
++        "ms": {
++          "version": "2.1.3",
++          "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
++          "integrity": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA=="
++        }
++      }
++    },
++    "nopt": {
++      "version": "1.0.10",
++      "resolved": "https://registry.npmjs.org/nopt/-/nopt-1.0.10.tgz",
++      "integrity": "sha512-NWmpvLSqUrgrAC9HCuxEvb+PSloHpqVu+FqcO4eeF2h5qYRhA7ev6KvelyQAKtegUbC6RypJnlEOhd8vloNKYg==",
++      "requires": {
++        "abbrev": "1"
++      }
++    },
++    "normalize-path": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npmjs.org/normalize-path/-/normalize-path-3.0.0.tgz",
++      "integrity": "sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA=="
++    },
+     "object-assign": {
+       "version": "4.1.1",
+       "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz",
+@@ -592,6 +764,11 @@
+       "resolved": "https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-0.1.7.tgz",
+       "integrity": "sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ=="
+     },
++    "picomatch": {
++      "version": "2.3.1",
++      "resolved": "https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz",
++      "integrity": "sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA=="
++    },
+     "process-nextick-args": {
+       "version": "2.0.1",
+       "resolved": "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz",
+@@ -611,6 +788,11 @@
+       "resolved": "https://registry.npmjs.org/pseudomap/-/pseudomap-1.0.2.tgz",
+       "integrity": "sha512-b/YwNhb8lk1Zz2+bXXpS/LK9OisiZZ1SNsSLxN1x2OXVEhW2Ckr/7mWE5vrC1ZTiJlD9g19jWszTmJsB+oEpFQ=="
+     },
++    "pstree.remy": {
++      "version": "1.1.8",
++      "resolved": "https://registry.npmjs.org/pstree.remy/-/pstree.remy-1.1.8.tgz",
++      "integrity": "sha512-77DZwxQmxKnu3aR542U+X8FypNzbfJ+C5XQDk3uWjWxn6151aIMGthWYRXTqT1E5oJvg+ljaa2OJi+VfvCOQ8w=="
++    },
+     "qs": {
+       "version": "6.10.3",
+       "resolved": "https://registry.npmjs.org/qs/-/qs-6.10.3.tgz",
+@@ -656,6 +838,14 @@
+         }
+       }
+     },
++    "readdirp": {
++      "version": "3.6.0",
++      "resolved": "https://registry.npmjs.org/readdirp/-/readdirp-3.6.0.tgz",
++      "integrity": "sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==",
++      "requires": {
++        "picomatch": "^2.2.1"
++      }
++    },
+     "safe-buffer": {
+       "version": "5.2.1",
+       "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz",
+@@ -666,6 +856,11 @@
+       "resolved": "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz",
+       "integrity": "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg=="
+     },
++    "semver": {
++      "version": "5.7.1",
++      "resolved": "https://registry.npmjs.org/semver/-/semver-5.7.1.tgz",
++      "integrity": "sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ=="
++    },
+     "send": {
+       "version": "0.18.0",
+       "resolved": "https://registry.npmjs.org/send/-/send-0.18.0.tgz",
+@@ -724,6 +919,21 @@
+         "object-inspect": "^1.9.0"
+       }
+     },
++    "simple-update-notifier": {
++      "version": "1.0.7",
++      "resolved": "https://registry.npmjs.org/simple-update-notifier/-/simple-update-notifier-1.0.7.tgz",
++      "integrity": "sha512-BBKgR84BJQJm6WjWFMHgLVuo61FBDSj1z/xSFUIozqO6wO7ii0JxCqlIud7Enr/+LhlbNI0whErq96P2qHNWew==",
++      "requires": {
++        "semver": "~7.0.0"
++      },
++      "dependencies": {
++        "semver": {
++          "version": "7.0.0",
++          "resolved": "https://registry.npmjs.org/semver/-/semver-7.0.0.tgz",
++          "integrity": "sha512-+GB6zVA9LWh6zovYQLALHwv5rb2PHGlJi3lfiqIHxR0uuwCgefcOJc59v9fv1w8GbStwxuuqqAjI9NMAOOgq1A=="
++        }
++      }
++    },
+     "sqlstring": {
+       "version": "2.3.1",
+       "resolved": "https://registry.npmjs.org/sqlstring/-/sqlstring-2.3.1.tgz",
+@@ -762,11 +972,35 @@
+         "is-utf8": "^0.2.0"
+       }
+     },
++    "supports-color": {
++      "version": "5.5.0",
++      "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-5.5.0.tgz",
++      "integrity": "sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==",
++      "requires": {
++        "has-flag": "^3.0.0"
++      }
++    },
++    "to-regex-range": {
++      "version": "5.0.1",
++      "resolved": "https://registry.npmjs.org/to-regex-range/-/to-regex-range-5.0.1.tgz",
++      "integrity": "sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==",
++      "requires": {
++        "is-number": "^7.0.0"
++      }
++    },
+     "toidentifier": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/toidentifier/-/toidentifier-1.0.1.tgz",
+       "integrity": "sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA=="
+     },
++    "touch": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/touch/-/touch-3.1.0.tgz",
++      "integrity": "sha512-WBx8Uy5TLtOSRtIq+M03/sKDrXCLHxwDcquSP2c43Le03/9serjQBIztjRz6FkJez9D/hleyAXTBGLwwZUw9lA==",
++      "requires": {
++        "nopt": "~1.0.10"
++      }
++    },
+     "type-is": {
+       "version": "1.6.18",
+       "resolved": "https://registry.npmjs.org/type-is/-/type-is-1.6.18.tgz",
+@@ -781,6 +1015,11 @@
+       "resolved": "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz",
+       "integrity": "sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA=="
+     },
++    "undefsafe": {
++      "version": "2.0.5",
++      "resolved": "https://registry.npmjs.org/undefsafe/-/undefsafe-2.0.5.tgz",
++      "integrity": "sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA=="
++    },
+     "unpipe": {
+       "version": "1.0.0",
+       "resolved": "https://registry.npmjs.org/unpipe/-/unpipe-1.0.0.tgz",
+diff --git a/package.json b/package.json
+index dea3c23..28c314a 100644
+--- a/package.json
++++ b/package.json
+@@ -17,6 +17,7 @@
+     "fast-csv": "^4.3.6",
+     "multer": "^1.4.5-lts.1",
+     "mysql": "^2.18.1",
+-    "mysql2": "^2.3.3"
++    "mysql2": "^2.3.3",
++    "nodemon": "^2.0.19"
+   }
+ }
+diff --git a/routes.js b/routes.js
+index 15ca48b..b789205 100644
+--- a/routes.js
++++ b/routes.js
+@@ -63,9 +63,8 @@ router.post('/recruiter_register', function(req, res){
+ 
+ //Recruiter login
+ router.post('/recruiter_login', function(req, res){
+-    res.writeHead(200,{'Content-Type':'text/html'})
+     const {email,password} = req.body;
+-    let sql = "SELECT email,password from `recruiter` where email = ? and password = ?" 
++    let sql = "SELECT * from `recruiter` where email = ? and password = ?" 
+      mysqlCon.query(sql,[email,password], 
+         function(err, result){
+             if(email&&password){
+@@ -73,10 +72,10 @@ router.post('/recruiter_login', function(req, res){
+                     if(error) throw error;
+                     
+                     if(result.length>0){
+-                        res.write('Login Succesfull')
++                        res.status(200).json({msg:'Login Succesfull',data:result[0]})
+                         res.end()
+                     }else{
+-                        res.write('Invalid credentials')
++                        res.status(401).json('Invalid credentials')
+                         res.end()
+                     }
+                 })
+@@ -116,6 +115,21 @@ router.get('/user_details/:id', function(req, res){
+         });
+ });
+ 
++//All Details of job by recruiter id
++router.get('/get_jobs/:id', function(req, res){
++    mysqlCon.query("SELECT jobs.id, recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId from jobs inner join recruiter on (jobs.recruiterId = recruiter.id) WHERE recruiter.id=? " ,
++    [req.params.id],
++       function(err, result){
++           if(result) {
++               res.json(result)
++               res.end();
++           }else{                
++               res.write('error')
++               throw err;
++           }
++       });
++});
++
+ // Edit Details of user
+ // provide all the details..
+ router.put('/editUser_register',function(req,res){
+@@ -154,13 +168,13 @@ router.post('/clgData', function(req, res){
+ 
+ //Add job data
+ router.post('/jobDetails', function(req, res){
+-    res.writeHead(200,{'Content-Type':'text/html'})
+-    const {collegeId,job_description,noOfOpening} = req.body;
+-    let sql = "INSERT INTO `jobs` (collegeId,job_description,noOfOpening) VALUES (?,?,?)" 
+-     mysqlCon.query(sql,[collegeId,job_description,noOfOpening], 
++    console.log(req.body);
++    const {recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId} = req.body;
++    let sql = "INSERT INTO `jobs` (recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId) VALUES (?,?,?,?,?,?,?,?,?,?)" 
++     mysqlCon.query(sql,[recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId], 
+         function(err, result){
+             if(err) throw err;
+-            res.write('Job Record inserted')
++            res.status(200).json({msg:'Record Inserted Successfully'})
+             res.end();
+         });
+ });
+@@ -168,9 +182,9 @@ router.post('/jobDetails', function(req, res){
+ //Edit job data
+ router.put('/jobDetails', function(req, res){
+     res.writeHead(200,{'Content-Type':'text/html'})
+-    const {id,collegeId,job_description,noOfOpening} = req.body;
+-    let sql = "UPDATE jobs SET collegeId=?,job_description=?,noOfOpening=? WHERE jobs.id = ?" 
+-     mysqlCon.query(sql,[collegeId,job_description,noOfOpening,id], 
++    const {id,recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId} = req.body;
++    let sql = "UPDATE jobs SET recruiterId=?, jobTitle=?, jobDescription=?, noOfOpening=?, jobTypeId=?, streamId=?, experience=?, qualification=?, city=?, stateId=? WHERE jobs.id = ?" 
++     mysqlCon.query(sql,[recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId,id], 
+         function(err, result){
+             if(err) throw err;
+             res.write('Updated Record')
+@@ -332,6 +346,69 @@ router.get('/getStream',(req,res)=>{
+                     res.end();
+                 });
+ })
++//Get jobType name
++router.get('/getJobType',(req,res)=>{
++    let sql = 'select id,name from job_types';
++    mysqlCon.query(sql, function(err, result){
++                    if(err) throw err;
++                    res.send(result)    
++                    res.end();
++                });
++})
++
++//Get state name
++router.get('/getState',(req,res)=>{
++    let sql = 'select id,name from states';
++    mysqlCon.query(sql, function(err, result){
++                    if(err) throw err;
++                    res.send(result)    
++                    res.end();
++                });
++})
++
++// Get number of  applicants of job
++router.get('/getNumberOfApplicant/:id',(req,res)=>{
++    mysqlCon.query("SELECT COUNT(applications.id) as count from applications inner join jobs on (applications.jobId = jobs.id) WHERE jobs.id=? " ,
++     [req.params.id],
++        function(err, result){
++            if(result) {
++                res.json(result[0])
++                res.end();
++            }else{                
++                res.write('error')
++                throw err;
++            }
++        });
++})
++
++// Get stream name by id
++router.get('/getStreamName/:id',(req,res)=>{
++    mysqlCon.query("SELECT streamName from stream WHERE id=? " ,
++     [req.params.id],
++        function(err, result){
++            if(result) {
++                res.json(result[0])
++                res.end();
++            }else{                
++                res.write('error')
++                throw err;
++            }
++        });
++})
+ 
++// Get jobType name by id
++router.get('/getJobType/:id',(req,res)=>{
++    mysqlCon.query("SELECT name from job_types WHERE id=? " ,
++     [req.params.id],
++        function(err, result){
++            if(result) {
++                res.json(result[0])
++                res.end();
++            }else{                
++                res.write('error')
++                throw err;
++            }
++        });
++})
+ 
+ module.exports = router;
+\ No newline at end of file
