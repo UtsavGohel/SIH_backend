@@ -185,8 +185,7 @@ router.put('/clgData', function(req, res){
 
 
 //Add job data
-router.post('/jobDetails', function(req, res){
-    console.log(req.body);
+router.post('/jobDetails', function(req, res){    
     const {recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId} = req.body;
     let sql = "INSERT INTO `jobs` (recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId) VALUES (?,?,?,?,?,?,?,?,?,?)" 
      mysqlCon.query(sql,[recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId], 
@@ -199,15 +198,40 @@ router.post('/jobDetails', function(req, res){
 
 //Edit job data
 router.put('/jobDetails', function(req, res){
-    res.writeHead(200,{'Content-Type':'text/html'})
     const {id,recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId} = req.body;
     let sql = "UPDATE jobs SET recruiterId=?, jobTitle=?, jobDescription=?, noOfOpening=?, jobTypeId=?, streamId=?, experience=?, qualification=?, city=?, stateId=? WHERE jobs.id = ?" 
      mysqlCon.query(sql,[recruiterId, jobTitle, jobDescription, noOfOpening, jobTypeId, streamId, experience, qualification, city, stateId,id], 
         function(err, result){
             if(err) throw err;
-            res.write('Updated Record')
+            res.status(200).json({msg:'Record Updated Successfully'})
             res.end();
         });
+});
+
+// Delete job data
+router.delete('/deleteJob/:id', function(req, res){  
+    let sql = "DELETE from jobs WHERE jobs.id=?"; 
+    mysqlCon.query(sql,[req.params.id], 
+        function(err, result){
+            if(err) throw err;
+            res.status(200).json({msg:'Record Deleted Successfully'})
+            res.end();
+        });
+});
+
+// get applicants for a job
+router.get('/getApplications/:id', function(req, res){
+    mysqlCon.query("SELECT * from applications inner join jobs on (applications.jobId = jobs.id) inner join user on applications.userId = user.id WHERE jobs.id=? " ,
+    [req.params.id],
+       function(err, result){
+           if(result) {
+               res.json(result)
+               res.end();
+           }else{                
+               res.write('error')
+               throw err;
+           }
+       });
 });
 
 //Add stream data
@@ -230,6 +254,22 @@ router.get('/job_details', function(req, res){
         function(err, result){
             if(result) {
                 res.json(result)
+                res.end();
+            }else{                
+                res.write('error')
+                throw err;
+
+            }
+        });
+});
+
+// display single job details by Id..
+router.get('/job_details/:id', function(req, res){
+    let sql = "select * from jobs where id=?" 
+     mysqlCon.query(sql,[req.params.id],
+        function(err, result){
+            if(result) {
+                res.json(result[0])
                 res.end();
             }else{                
                 res.write('error')
@@ -496,4 +536,20 @@ router.get('/AllProfessor/:id',function(req,res){
             }
         });
 }) 
+
+//All JOb list
+router.get('/AllJobsList',function(req,res){
+    let sql = "SELECT jobTitle,jobDescription,noOfOpening,job_types.name,stream.streamName,experience,qualification from jobs inner join job_types on jobs.jobTypeId = job_types.id inner join stream on jobs.streamId=stream.id inner join states on jobs.stateId = states.id";
+    mysqlCon.query(sql,[req.params.id],
+        function(err, result){
+            if(result) {
+                res.json(result)
+                res.end();
+            }else{                
+                res.write('error')
+                throw err;
+
+            }
+        });
+})
 module.exports = router;
