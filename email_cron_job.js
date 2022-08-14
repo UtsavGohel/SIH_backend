@@ -6,7 +6,7 @@ var fs = require('fs');
 
 module.exports = () => {
 
-  cron.schedule('* * * * *', function () { // (* * * * *) use for 1 min
+  cron.schedule('1 * * * *', function () { // (* * * * *) use for 1 
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
