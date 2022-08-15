@@ -61,6 +61,26 @@ router.post('/recruiter_register', function(req, res){
         });
 });
 
+//edit recruiter
+router.patch('/recruiterUpdate', function(req, res){
+  
+    const {id,name,email,contact}= req.body
+  
+    let sql = `UPDATE recruiter SET name=?,email=?,contact=? WHERE id = ?`;   
+ 
+    mysqlCon.query(sql,[name,email,contact,id],
+        function(error,response){
+            if(res) {
+                res.status(200).json('Updated Recruiter Details')
+                res.end();
+            }else{               
+                res.write('error')
+                throw error;
+            }
+    })
+ });
+ 
+
 //Recruiter login
 router.post('/recruiter_login', function(req, res){
     const {email,password} = req.body;
@@ -82,6 +102,24 @@ router.post('/recruiter_login', function(req, res){
             }
         });
 });
+
+
+// get recuiter details by id
+router.get('/recruiter_details/:id',function(req,res){
+    let sql = "SELECT * FROM recruiter where id=?;";
+    mysqlCon.query(sql,[req.params.id],
+        function(err, result){
+            if(result) {
+                res.json(result[0])
+                res.end();
+            }else{               
+                res.write('error')
+                throw err;
+  
+            }
+        });
+ })
+ 
 
 //All Details of user
 router.get('/user_details', function(req, res){
@@ -154,10 +192,10 @@ router.put('/editUser_register',function(req,res){
 
 //Add college data
 router.post('/clgData', function(req, res){
-    
-    const {collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage} = req.body;
-    let sql = "INSERT INTO `college` (collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage) VALUES (?,?,?,?,?,?,?,?,?,?)" 
-     mysqlCon.query(sql,[collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage], 
+  
+    const {collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage, email, website} = req.body;
+    let sql = "INSERT INTO `college` (collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage,email,website) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+     mysqlCon.query(sql,[collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage, email, website],
         function(err, result){
             if(err) throw err;
             else{
@@ -166,22 +204,38 @@ router.post('/clgData', function(req, res){
                 res.end();
             }
         });
-});
+ });
+  
+ // get college details
+ router.get('/clgData/:id', function(req, res){
+   
+    let sql = "select * from college where college.id=?";
+     mysqlCon.query(sql,[req.params.id],
+        function(err, result){
+            if(err) throw err;
+            else{
+                res.status(200).json(result[0])               
+                res.end();
+            }
+        });
+ });
+
+ 
 //Edit college data
 router.put('/clgData', function(req, res){
-    
-    const {collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage} = req.body;
-    let sql = "UPDATE college SET collegeName=?,Address=?,contact=?,estSince=?,description=?,fbPage=?,twitterPage=?,linkdinPage=?,instagramPage=?,youtubePage=? WHERE college.id = ?" 
-     mysqlCon.query(sql,[collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage], 
+  
+    const {collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage, email, website, id} = req.body;
+    let sql = "UPDATE college SET collegeName=?,Address=?,contact=?,estSince=?,description=?,fbPage=?,twitterPage=?,linkdinPage=?,instagramPage=?,youtubePage=?, email=?, website=? WHERE college.id = ?"
+     mysqlCon.query(sql,[collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage, email, website, id],
         function(err, result){
             if(err) throw err;
             else{
-                res.status(200).json('College Record  inserted')
-                // res.write(err)
+                res.status(200).json('College Record Updated')
                 res.end();
             }
         });
-});
+ });
+ 
 
 
 //Add job data
@@ -552,4 +606,36 @@ router.get('/AllJobsList',function(req,res){
             }
         });
 })
+//recruiter details
+router.get('/recruiter_details',function(req,res){
+    let sql = "SELECT recruiter.id,name,recruiter.email,recruiter.contact,collegeName FROM recruiter inner join college on recruiter.collegeId = college.id;";
+    mysqlCon.query(sql,[req.params.id],
+        function(err, result){
+            if(result) {
+                res.json(result)
+                res.end();
+            }else{                
+                res.write('error')
+                throw err;
+
+            }
+        });
+})
+
+//Add college data by admin
+router.post('/clgDataByAdmin', function(req, res){
+    
+    const {collegeName,Address,contact,email,website} = req.body;
+    let sql = "INSERT INTO `college` (collegeName,Address,contact,email,website) VALUES (?,?,?,?,?)" 
+     mysqlCon.query(sql,[collegeName,Address,contact,email,website], 
+        function(err, result){
+            if(err) throw err;
+            else{
+                res.status(200).json('College Record  inserted')
+                // res.write(err)
+                res.end();
+            }
+        });
+});
+
 module.exports = router;
