@@ -123,11 +123,11 @@ router.get('/recruiter_details/:id',function(req,res){
 
 //All Details of user
 router.get('/user_details', function(req, res){
-    let sql = "SELECT name,email,user.address,experience,subjects,resume,notice_period,collegeName,streamName,collegeName,DOB from user inner join college on user.collegeId = college.id inner join stream on user.streamId = stream.id" 
+    let sql = "SELECT name,user.email,user.address,experience,subjects,resume,notice_period,collegeName,streamName,collegeName,DOB from user inner join college on (user.collegeId = college.id) inner join stream on (user.streamId = stream.id" 
      mysqlCon.query(sql,
         function(err, result){
             if(result) {
-                res.json(result)
+                res.json(result[0])
                 res.end();
             }else{                
                 res.write('error')
@@ -140,7 +140,7 @@ router.get('/user_details', function(req, res){
 
 //All Details of user by id
 router.get('/user_details/:id', function(req, res){
-     mysqlCon.query("SELECT name,email,user.address,experience,subjects,resume,notice_period,collegeName,streamName,collegeName,DOB from user inner join college on (user.collegeId = college.id) inner join stream on (user.streamId = stream.id) WHERE user.id=? " ,
+     mysqlCon.query("SELECT name,user.email,user.address,experience,subjects,resume,notice_period,collegeName,streamName,collegeName,DOB from user inner join college on (user.collegeId = college.id) inner join stream on (user.streamId = stream.id) WHERE user.id=? " ,
      [req.params.id],
         function(err, result){
             if(result) {
