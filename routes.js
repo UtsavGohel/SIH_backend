@@ -47,6 +47,25 @@ router.post('/user_login', function(req, res){
     }
 });
 
+//change user password
+router.patch('/user_change_password/:id',function(req,res){
+    const {password}= req.body
+    const {id}= req.params
+    
+     let sql = `UPDATE user SET password=? WHERE user.id = ?`;    
+ 
+     mysqlCon.query(sql,[password,id],
+         function(error,response){
+             if(response) {
+                 res.status(200).json('Password Updated')
+                 
+                 res.end();
+             }else{                
+                 res.status(400).json('error')
+                 throw error;
+             }
+     })       
+ })
 
 // Recruiter Register
 router.post('/recruiter_register', function(req, res){
@@ -123,11 +142,11 @@ router.get('/recruiter_details/:id',function(req,res){
 
 //All Details of user
 router.get('/user_details', function(req, res){
-    let sql = "SELECT name,user.email,user.address,experience,subjects,resume,notice_period,collegeName,streamName,collegeName,DOB from user inner join college on (user.collegeId = college.id) inner join stream on (user.streamId = stream.id" 
+    let sql = "SELECT name,user.email,user.address,experience,subjects,resume,notice_period,collegeName,streamName,collegeName,DOB,user.fb,user.twitter,user.linkdin from user inner join college on (user.collegeId = college.id) inner join stream on (user.streamId = stream.id)" 
      mysqlCon.query(sql,
         function(err, result){
             if(result) {
-                res.json(result[0])
+                res.json(result)
                 res.end();
             }else{                
                 res.write('error')
@@ -140,7 +159,7 @@ router.get('/user_details', function(req, res){
 
 //All Details of user by id
 router.get('/user_details/:id', function(req, res){
-     mysqlCon.query("SELECT name,user.email,user.address,experience,subjects,resume,notice_period,collegeName,streamName,collegeName,DOB from user inner join college on (user.collegeId = college.id) inner join stream on (user.streamId = stream.id) WHERE user.id=? " ,
+     mysqlCon.query("SELECT user.id,user.name,user.email,user.streamId,user.collegeId,user.DOB,user.address,user.contact,user.experience,college.collegeName,user.subjects,user.resume,user.DOB,stream.streamName,user.fb,user.twitter,user.linkdin FROM user inner join college on user.collegeId = college.id inner join stream  on user.streamId = stream.id where user.id = ? " ,
      [req.params.id],
         function(err, result){
             if(result) {
@@ -171,19 +190,21 @@ router.get('/get_jobs/:id', function(req, res){
 // Edit Details of user
 // provide all the details..
 router.put('/editUser_register',function(req,res){
-   const {id,name,email,password,address,contact,experience,collegeId,streamId,subjects,resume,notice_period}= req.body
+   const {name,email,password,address,contact,experience,collegeId,streamId,subjects,resume,notice_period,DOB,fb,twitter,linkdin,id}= req.body
    
-    let sql = `UPDATE user SET name=?,email=?,password=?,address=?,contact=?,experience=?,collegeId=?,streamId=?,subjects=?,resume=?,notice_period=? WHERE user.id = ?`;    
-
+   
+    let sql = `UPDATE user SET name=?,email=?,password=?,address=?,contact=?,experience=?,collegeId=?,streamId=?,subjects=?,resume=?,notice_period=?,DOB=?,fb=?,twitter=?,linkdin=? WHERE user.id = ?`;    
+    // console.log(req.body);
     mysqlCon.query(sql,[name,email,password,address,contact,
         experience,collegeId,streamId,subjects,
-        resume,notice_period,id],
+        resume,notice_period,DOB,fb,twitter,linkdin,id],    
         function(error,response){
-            if(res) {
-                res.write('Updated')
+            if(response) {
+                res.status(200).json('Updated')
                 res.end();
+                
             }else{                
-                res.write('error')
+                res.status(400).json('Not')
                 throw error;
             }
     })       
@@ -192,7 +213,6 @@ router.put('/editUser_register',function(req,res){
 
 //Add college data
 router.post('/clgData', function(req, res){
-  
     const {collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage, email, website} = req.body;
     let sql = "INSERT INTO `college` (collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage,email,website) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
      mysqlCon.query(sql,[collegeName,Address,contact,estSince,description,fbPage,twitterPage,linkdinPage,instagramPage,youtubePage, email, website],
@@ -637,5 +657,23 @@ router.post('/clgDataByAdmin', function(req, res){
             }
         });
 });
+
+//delete recruiter by id
+router.delete('/recruiter_details/:id',function(req,res){
+    let sql = "Delete FROM recruiter where id=?";
+    mysqlCon.query(sql,[req.params.id],
+        function(err, result){
+            if(result) {
+                res.json(result[0])
+                res.end();
+            }else{               
+                res.write('error')
+                throw err;
+  
+            }
+        });
+ })
+
+
 
 module.exports = router;
