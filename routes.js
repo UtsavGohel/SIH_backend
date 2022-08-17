@@ -519,19 +519,40 @@ router.get('/getState',(req,res)=>{
 
 
 //ApplyForJob by application
-router.post('/ApplyForJob',function(req,res){
-    const {userId,jobId,statusId,recruiterId} = req.body;
-    let sql = "INSERT INTO `applications` (userId,jobId,statusId) VALUES (?,?,?)"
-     mysqlCon.query(sql,[userId,jobId,statusId,recruiterId],
+// router.post('/ApplyForJob',function(req,res){
+//     const {userId,jobId,statusId, recruiterId} = req.body;
+//     let sql = "INSERT INTO `applications` (userId,jobId,statusId) VALUES (?,?,?)"
+//      mysqlCon.query(sql,[userId,jobId,statusId],
+//         function(err, result){
+//             if(err) throw err;
+//             else{
+//                 let sql = "INSERT INTO `rooms` (userId,recruiterId) VALUES (?,?)"
+//                 mysqlCon.query(sql,[userId,recruiterId],
+//                    function(err, result){
+//                        if(err) throw err;                      
+//                    });
+//                 res.status(200).json('Job Application submitted')               
+//                 res.end();
+//             }
+//         });
+//  })
+ 
+//get Job Recruiter Of Candidate
+router.get('/getJobRecruiterOfCandidate/:id',function(req,res){
+    let sql = "SELECT recruiter.id, recruiter.name FROM applications INNER JOIN jobs ON applications.jobId = jobs.id INNER JOIN recruiter ON jobs.recruiterId = recruiter.id JOIN user ON applications.userId = user.id where user.id=?";
+    mysqlCon.query(sql,[req.params.id],
         function(err, result){
-            if(err) throw err;
-            else{
-                res.status(200).json('Job Application submitted')
-                // res.write(err)
+            if(result) {
+                res.status(200).json(result)
                 res.end();
+            }else{               
+                res.write('error')
+                throw err;
             }
         });
-})
+ })
+ 
+ 
 
 // Get number of  applicants of job
 router.get('/getNumberOfApplicant/:id',(req,res)=>{
@@ -756,5 +777,105 @@ router.get('/AppliedJob/:id',function(req,res){
         });
 })
 
-
+// Add Room
+router.post('/addRoom', function(req, res){   
+    const {recruiterId, userId} = req.body;
+    let sql = "INSERT INTO rooms (recruiterId, userId) VALUES (?,?)"
+     mysqlCon.query(sql,[recruiterId, userId],
+        function(err, result){
+            if(err) throw err;
+            res.status(200).json({msg:'Room Created Successfully'})
+            res.end();
+        });
+ });
+  
+ //edit room
+ router.put('/updateRoom', function(req, res){       
+    const {id, recruiterId, userId} = req.body;
+    let sql = "UPDATE jobs SET recruiterId=?, userId=? WHERE rooms.id = ?"
+     mysqlCon.query(sql,[recruiterId, userId, id],
+        function(err, result){
+            if(err) throw err;
+            res.status(200).json({msg:'Room updated Successfully'})
+            res.end();
+        });
+ });
+  
+ //get Room details
+ router.post('/getroom',function(req,res){
+    let sql = "SELECT * FROM rooms where userId=? and recruiterId=?";   
+    mysqlCon.query(sql,[req.body.userId,req.body.recruiterId],
+        function(err, result){
+            if(result) {
+                res.json(result[0])
+                res.end();
+            }else{               
+                res.write('error')
+                throw err;
+  
+            }
+        });
+ })
+  
+ // get Chats
+ router.get('/getChats/:id',function(req,res){
+    let sql = "SELECT * from chats where roomId=?";   
+    mysqlCon.query(sql,[req.params.id],
+        function(err, result){
+            if(result) {
+                res.json(result)
+                res.end();
+            }else{               
+                res.write('error')
+                throw err;
+            }
+        });
+ })
+  
+ // Add Message
+ router.post('/addMessage',function(req,res){
+    const {senderId, roomId, message} = req.body;
+    let sql = "INSERT INTO chats (senderId, roomId, message) VALUES (?,?,?)"
+     mysqlCon.query(sql,[senderId, roomId, message],
+        function(err, result){
+            if(err) throw err;
+            res.status(200).json({msg:'Message Added Successfully'})
+            res.end();
+        });
+  
+ })
+  
+ //ApplyForJob by application
+ router.post('/ApplyForJob',function(req,res){
+    const {userId,jobId,statusId, recruiterId} = req.body;
+    let sql = "INSERT INTO `applications` (userId,jobId,statusId) VALUES (?,?,?)"
+     mysqlCon.query(sql,[userId,jobId,statusId],
+        function(err, result){
+            if(err) throw err;
+            else{
+                let sql = "INSERT INTO `rooms` (userId,recruiterId) VALUES (?,?)"
+                mysqlCon.query(sql,[userId,recruiterId],
+                   function(err, result){
+                       if(err) throw err;                      
+                   });
+                res.status(200).json('Job Application submitted')               
+                res.end();
+            }
+        });
+ })
+  
+ //get Job Recruiter Of Candidate
+ router.get('/getJobRecruiterOfCandidate/:id',function(req,res){
+    let sql = "SELECT recruiter.id, recruiter.name, recruiter.email FROM applications INNER JOIN jobs ON applications.jobId = jobs.id INNER JOIN recruiter ON jobs.recruiterId = recruiter.id JOIN user ON applications.userId = user.id where user.id=?";
+    mysqlCon.query(sql,[req.params.id],
+        function(err, result){
+            if(result) {
+                res.status(200).json(result)
+                res.end();
+            }else{               
+                res.write('error')
+                throw err;
+            }
+        });
+ })
 module.exports = router;
