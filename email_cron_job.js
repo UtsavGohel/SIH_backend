@@ -6,7 +6,7 @@ var fs = require('fs');
 
 module.exports = () => {
 
-  cron.schedule('1 * * * *', function () { // (* * * * *) use for 1 
+  cron.schedule('1 * * * *', function () { // (* * * * *) use for 1
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -35,7 +35,7 @@ module.exports = () => {
 
     employees.forEach(element => {
       var emailId;
-      let sql = "SELECT email FROM recruiter inner join college on recruiter.collegeId = college.id where college.id=? limit 1";
+      let sql = "SELECT recruiter.email FROM recruiter inner join college on recruiter.collegeId = college.id where college.id=? limit 1";
       mysqlCon.query(sql,[element.collegeId],
         function (err, result) {
           if (result) {
