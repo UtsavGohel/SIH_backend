@@ -14,14 +14,15 @@ const mysqlCon = require('./conn')
 
 // User Register 
 router.post('/user_register', function(req, res){
-    res.writeHead(200,{'Content-Type':'text/html'})
     const {name,email,password,address,contact,experience,streamId,subjects,resume,notice_period,DOB} = req.body;
     let sql = "INSERT INTO `user` (name,email,password,address,contact,experience,streamId,subjects,resume,notice_period,DOB) VALUES (?,?,?,?,?,?,?,?,?,?,?)" 
      mysqlCon.query(sql,[name,email,password,address,contact,experience,
         streamId,subjects,resume,notice_period,DOB], 
         function(err, result){
-            if(err) throw err;
-            res.write('Users Record inserted')
+            if(err){
+                res.status(400).json('error while inserting error')  
+            } 
+            res.status(200).json('Users Record inserted')
             res.end();
         });
 });
@@ -75,7 +76,9 @@ router.post('/recruiter_register', function(req, res){
     let sql = "INSERT INTO `recruiter` (name,email, password,address, contact, collegeId) VALUES (?,?,?,?,?,?)" 
      mysqlCon.query(sql,[name,email, password,address, contact, collegeId], 
         function(err, result){
-            if(err) throw err;
+            if(err) {
+                res.status(400).json('Error while inserting Recruiter Record')
+            }
             res.status(200).json('Recruiter Record inserted')
             res.end();
         });
@@ -380,7 +383,8 @@ var storage = multer.diskStorage({
        cb(null, 'uploads');
     },
     filename: function (req, file, cb) {
-       cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+       cb(null, `${file.originalname}`);
+    //    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
     }
  });
  var upload = multer({ storage: storage });
@@ -388,8 +392,9 @@ var storage = multer.diskStorage({
 // Insert proffersor data into portal by csv
  router.post('/addcsv', upload.single('data'), (req, res, next) => {
     const file = req.file;
-    var filename = req.file.filename;
-    console.log(filename);
+    console.log(req.file.filename);
+     req.file.filename = 'rec11.pdf';
+    console.log(req.file.filename);
     if (!file) {
        return res.status(400).send({ message: 'Please upload a file.' });
     }
@@ -878,4 +883,34 @@ router.post('/addRoom', function(req, res){
             }
         });
  })
+
+ // Professor Register
+router.post('/professor_Data_Add', function(req, res){
+
+    const {name,contact,address,experience,collegeId,streamId,subject,DOB} = req.body;
+    let sql = "INSERT INTO `employee` (name,contact,address,experience,collegeId,streamId,subject,DOB) VALUES (?,?,?,?,?,?,?,?)" 
+     mysqlCon.query(sql,[name,contact,address,experience,collegeId,streamId,subject,DOB], 
+        function(err, result){
+            if(err) throw err;
+            res.status(200).json('Professor Record inserted')
+            res.end();
+        });
+});
+
+
+//No. of applicants of job applications;
+router.get('/noOfApplicant/:id',function(req,res){
+    let sql = "select count(jobId) as count from applications where jobId=?;";
+    mysqlCon.query(sql,[req.params.id],
+        function(err, result){
+            if(result) {
+                res.status(200).json(result[0])
+                res.end();
+            }else{               
+                res.write('error')
+                throw err;
+            }
+        });
+})
+
 module.exports = router;
