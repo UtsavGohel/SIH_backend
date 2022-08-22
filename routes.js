@@ -604,6 +604,19 @@ router.get('/getJobType/:id',(req,res)=>{
         });
 })
 
+// Get All status 
+router.get('/getStatusName',(req,res)=>{
+    mysqlCon.query("SELECT id,name from statuses" ,
+        function(err, result){
+            if(result) {
+                res.json(result)
+                res.end();
+            }else{                
+                res.write('error')
+                throw err;
+            }
+        });
+})
 // Get status by id
 router.get('/getStatusName/:id',(req,res)=>{
     mysqlCon.query("SELECT name from statuses WHERE id=? " ,
@@ -619,6 +632,22 @@ router.get('/getStatusName/:id',(req,res)=>{
         });
 })
 
+//Update status by recruiter
+router.patch('/updateStatus/:id',function(req,res){
+    const {statusId}= req.body.statusId
+    const {id}= req.params
+     let sql = `UPDATE application SET statusId=? WHERE user.id = ?`;    
+     mysqlCon.query(sql,[statusId,id],
+         function(error,response){
+             if(response) {
+                 res.status(200).json('Status Updated')
+                 res.end();
+             }else{                
+                 res.status(400).json('error')
+                 throw error;
+             }
+     })       
+ })
 //All candidate list
 router.get('/getCandidateList/:id', function(req, res){
     mysqlCon.query("SELECT * from applications inner join jobs on applications.jobId = jobs.id inner join recruiter on jobs.recruiterId = recruiter.id join user on applications.userId = user.id WHERE recruiter.id=? " ,
