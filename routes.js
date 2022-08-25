@@ -647,7 +647,23 @@ router.patch('/updateStatus',function(req,res){
     })      
 })
  
-
+//check candidate applied for user
+router.post('/checkAppliedForJob',function(req,res){
+    let sql = "select count(id) as count from applications where jobId=? and userId=?;";
+    mysqlCon.query(sql,[req.body.jobId, req.body.userId],
+        function(err, result){
+            if(result) {
+                res.status(200).json(result[0])
+                res.end();
+            }else{              
+                res.write('error')
+                throw err;
+            }
+        });
+ })
+ 
+ 
+ 
 
 // //All candidate list
 // router.get('/getCandidateList/:id', function(req, res){
