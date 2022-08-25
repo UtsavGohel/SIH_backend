@@ -633,35 +633,51 @@ router.get('/getStatusName/:id',(req,res)=>{
 })
 
 //Update status by recruiter
-router.patch('/updateStatus/:id',function(req,res){
-    const {statusId}= req.body.statusId
-    const {id}= req.params
-     let sql = `UPDATE application SET statusId=? WHERE user.id = ?`;    
-     mysqlCon.query(sql,[statusId,id],
-         function(error,response){
-             if(response) {
-                 res.status(200).json('Status Updated')
-                 res.end();
-             }else{                
-                 res.status(400).json('error')
-                 throw error;
-             }
-     })       
- })
-//All candidate list
+router.patch('/updateStatus',function(req,res){
+    let sql = "UPDATE applications SET applications.statusId=? WHERE applications.id = ?"
+    mysqlCon.query(sql,[req.body.statusId, req.body.applicationId],
+        function(error,response){
+            if(response) {
+                res.status(200).json('Status Updated')
+                res.end();
+            }else{               
+                res.status(400).json('error')
+                throw error;
+            }
+    })      
+})
+ 
+
+
+// //All candidate list
+// router.get('/getCandidateList/:id', function(req, res){
+//     mysqlCon.query("SELECT * from applications inner join jobs on applications.jobId = jobs.id inner join recruiter on jobs.recruiterId = recruiter.id join user on applications.userId = user.id WHERE recruiter.id=? " ,
+//     [req.params.id],
+//        function(err, result){
+//            if(result) {
+//                res.json(result)
+//                res.end();
+//            }else{                
+//                res.write('error')
+//                throw err;
+//            }
+//        });
+// });
+
 router.get('/getCandidateList/:id', function(req, res){
-    mysqlCon.query("SELECT * from applications inner join jobs on applications.jobId = jobs.id inner join recruiter on jobs.recruiterId = recruiter.id join user on applications.userId = user.id WHERE recruiter.id=? " ,
+    mysqlCon.query("SELECT applications.id as applicationId, applications.userId, applications.jobId, applications.statusId, jobs.*, recruiter.*, user.* from applications inner join jobs on applications.jobId = jobs.id inner join recruiter on jobs.recruiterId = recruiter.id join user on applications.userId = user.id WHERE recruiter.id=? " ,
     [req.params.id],
        function(err, result){
            if(result) {
-               res.json(result)
-               res.end();
-           }else{                
-               res.write('error')
-               throw err;
-           }
-       });
+            res.json(result)
+            res.end();
+        }else{                
+            res.write('error')
+            throw err;
+        }
+    });
 });
+
 
 //change recruiter password
 router.patch('/change_password/:id',function(req,res){
@@ -941,5 +957,21 @@ router.get('/noOfApplicant/:id',function(req,res){
             }
         });
 })
+
+// Get application details by Id
+router.get('/getApplicationDetails/:id',function(req,res){
+    let sql = "select * from applications where id=?;";
+    mysqlCon.query(sql,[req.params.id],
+        function(err, result){
+            if(result) {
+                res.status(200).json(result[0])
+                res.end();
+            }else{               
+                res.write('error')
+                throw err;
+            }
+        });
+})
+
 
 module.exports = router;

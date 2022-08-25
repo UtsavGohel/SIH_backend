@@ -1,10 +1,13 @@
 const mysql = require('mysql2')
 const mysqlCon = mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'root',
+    host:'mysql-86392-0.cloudclusters.net',
+    port:11038,
+    user:'admin',
+    password:'CKHPBsDe',
     database:'tempsih'
-}) 
+ })
+ 
+ 
 
 mysqlCon.connect((err)=>{
     if(!err){

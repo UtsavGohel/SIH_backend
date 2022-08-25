@@ -18,6 +18,8 @@ app.use(cors())
 app.use(router)
 require('./email_cron_job')();
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 io.on('connection', (socket) => {
    socket.on('join', (data) => {
        socket.join(data.room);
@@ -29,7 +31,7 @@ io.on('connection', (socket) => {
    });
 });
 
-server.listen(3000, (err,msg)=>{
+server.listen(process.env.PORT || 3000, (err,msg)=>{
    if(err){
        console.log(err);
    }else{
